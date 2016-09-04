@@ -1,0 +1,10 @@
+ext3 文件镜像制作
+	
+	dd if=/dev/zero of=image bs=1024 count=30000 //生成30M的文件
+	格式化: mkfs.ext3 image
+	挂载: mount -o loop image /mnt/new
+
+
+查看文件系统版本
+	直接使用 mount 命令
+	

@@ -1,0 +1,15 @@
+#ifndef EXT_ERROR
+#define EXT_ERROR
+
+#define SUCCESS 0
+#define INODE_NOT_EXIST  100
+#define END_OF_DIRECTORY  101
+#define DIR_NOT_EXIST 102
+#define READ_FILE_BLOCK_ERROR 103
+#define GROUP_DESC_NOT_FIND 104
+#define FILE_NAME_ERROR 105
+
+#endif
+
+
+
