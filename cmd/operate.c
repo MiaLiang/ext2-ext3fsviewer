@@ -9,6 +9,7 @@
 #include "../fs/dir.h"
 #include "../fs/file.h"
 
+#include "cmd.h"
 #include "operate.h"
 
 char g_pwd[2048];
@@ -216,7 +217,7 @@ void PrintGroupsInfo(char* param1, char* param2)
 		start = atoi(param1);
 	}
 
-	//´òÓ¡ÌØ¶¨×éÃèÊö
+	//Å½Ã²Ã“Â¡ÃŒÃ˜Â¶Å¡Ã—Ã©ÃƒÃ¨ÃŠÃ¶
 	if(param1 != NULL && param2 == NULL)
 	{
 		PrintGroup(start);
@@ -488,7 +489,7 @@ void PrintHelpFileStat()
 	printf("    filestat [filepath]\n\n");
 }
 
-void GetAbsolutePath(char* pwd, char* inputPath)	//»ñÈ¡¾ø¶ÔÂ·¾¶
+void GetAbsolutePath(char* pwd, char* inputPath)	//Â»Ã±ÃˆÂ¡Å¸Ã¸Â¶Ã”Ã‚Â·Å¸Â¶
 {
 	if(!inputPath)
 	{
@@ -508,3 +509,24 @@ void GetAbsolutePath(char* pwd, char* inputPath)	//»ñÈ¡¾ø¶ÔÂ·¾¶
 	
 }
 
+/* treeå¼€å§‹ */
+void PrintTree(char* filename, ext2_fstat* fstat)
+{
+	char info[512];
+	char tmp[64];
+	
+	memset(info, ' ', sizeof(info));
+
+	char* p = info;
+
+	memcpy(p, filename, strlen(filename));
+	p += 30;
+
+	*p = '\0';
+
+	printf("%s", info);
+	
+	
+		
+}
+/* treeç»“æŸ */

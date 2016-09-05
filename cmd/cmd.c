@@ -17,6 +17,9 @@ static int s_params_count = 0;
 static char s_params[MAX_PARAMS][1024];
 extern char g_pwd[2048];
 
+int i = 0;
+int k = 0;
+
 int ParseCmd(char* cmd)
 {
 	int len = strlen(cmd);
@@ -336,7 +339,6 @@ void CmdHelp(char* param1)
 
 }
 
-
 void ExeCmd()
 {
 	char* params[MAX_PARAMS];
@@ -381,6 +383,10 @@ void ExeCmd()
 	{
 		CmdHelp(params[1]);
 	}
+	else if(StrCaseCmp(s_params[0], "tree"))
+	{
+		CmdTree(params[1]);
+	}
 	else
 	{
 		printf("invaild cmd\n");
@@ -413,4 +419,78 @@ void WaitCmd()
 
 }
 
+/* tree开始 */
+void CmdTree(char* param1){
+	printf("This is tree command");
+	
+	char path[2048];
+	GetAbsolutePath(path, param1);
+
+	DIR_t dir;
+	if(!OpenDir(&dir, path))
+	{
+		printf("can not open path %s\n", path);
+		return ;
+	}
+
+	if(dir.type == EXT2_FT_DIR)
+	{ 
+		printf("%s--",path);
+		CmdListTree(&dir, path);
+		
+	}
+	
+}
+
+void CmdListTree(DIR_t* dir, char* dirpath)
+{	
+	i++;
+	ext2_dir_entry_2 entry;
+	
+	char path[1024];//新路径
+	char pat[1024];	
+	char name[256];
+	
+	while(ReadDir(dir, &entry))
+	{
+		ext2_fstat fstat;
+		if(!GetFileStat(entry.inode, &fstat))
+		{
+			continue;
+		}
+
+		memcpy(name, entry.name, entry.name_len);
+		name[entry.name_len] = '\0';
+		
+		if(S_ISDIR(fstat.st_mode)&&(!StrCaseCmp(name, ".."))&&(!StrCaseCmp(name, "."))){
+			memset(path,0,1024);
+			strcpy(path, dirpath);
+			strcat(path, entry.name);
+			printf("New dirww:%s\n",path);
+			DIR_t dir;
+			if(!OpenDir(&dir, path))
+			{
+				printf("can not open path %s\n", path);
+				return ;
+			}
+
+			if(dir.type == EXT2_FT_DIR)
+			{ 
+				printf("%s--",path);
+				CmdListTree(&dir, path);
+		
+			}
+			
+			
+		}
+		PrintTree(name, &fstat);	
+		
+	}
+
+	printf("\n");
+	
+	
+}
+
+/* tree结束 */
 
