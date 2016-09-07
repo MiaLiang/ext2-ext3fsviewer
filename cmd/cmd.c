@@ -421,8 +421,6 @@ void WaitCmd()
 
 /* tree开始 */
 void CmdTree(char* param1){
-	printf("This is tree command");
-	
 	char path[2048];
 	GetAbsolutePath(path, param1);
 
@@ -435,14 +433,13 @@ void CmdTree(char* param1){
 
 	if(dir.type == EXT2_FT_DIR)
 	{ 
-		printf("%s--",path);
-		CmdListTree(&dir, path);
+		CmdListTree(&dir, path,0);
 		
 	}
 	
 }
 
-void CmdListTree(DIR_t* dir, char* dirpath)
+void CmdListTree(DIR_t* dir, char* dirpath, int depth)
 {	
 	i++;
 	ext2_dir_entry_2 entry;
@@ -465,25 +462,28 @@ void CmdListTree(DIR_t* dir, char* dirpath)
 		if(S_ISDIR(fstat.st_mode)&&(!StrCaseCmp(name, ".."))&&(!StrCaseCmp(name, "."))){
 			memset(path,0,1024);
 			strcpy(path, dirpath);
-			strcat(path, entry.name);
-			printf("New dirww:%s\n",path);
-			DIR_t dir;
-			if(!OpenDir(&dir, path))
+			strcat(path,name);
+			strcat(path,"/");
+
+			DIR_t dirr;
+			if(!OpenDir(&dirr, path))
 			{
 				printf("can not open path %s\n", path);
 				return ;
 			}
 
-			if(dir.type == EXT2_FT_DIR)
+			if(dirr.type == EXT2_FT_DIR)
 			{ 
-				printf("%s--",path);
-				CmdListTree(&dir, path);
+				printf("%s%*s%s/\n","|",depth,"|--",name);
+				CmdListTree(&dirr, path, depth+7);
 		
 			}
 			
 			
+		} else{
+			PrintTree(name, &fstat, depth);	
 		}
-		PrintTree(name, &fstat);	
+		
 		
 	}
 

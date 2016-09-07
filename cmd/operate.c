@@ -510,7 +510,7 @@ void GetAbsolutePath(char* pwd, char* inputPath)	//»ñÈ¡Ÿø¶ÔÂ·Ÿ¶
 }
 
 /* tree开始 */
-void PrintTree(char* filename, ext2_fstat* fstat)
+void PrintTree(char* filename, ext2_fstat* fstat, int depth)
 {
 	char info[512];
 	char tmp[64];
@@ -524,7 +524,7 @@ void PrintTree(char* filename, ext2_fstat* fstat)
 
 	*p = '\0';
 
-	printf("%s", info);
+	 printf("%s%*s%s/\n","|",depth,"|--",info);
 	
 	
 		
